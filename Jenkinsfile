@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     stages {
-        stage('Install dependencies'){
+        stage('Install Dependencies'){
             steps{
                 sh 'npm install'
             }
         }
 
-        stage('Run unit tests'){
+        stage('Run Unit Tests'){
             steps{
                 sh 'npm run test'
             }
@@ -18,6 +18,15 @@ pipeline {
             steps{
                 withSonarQubeEnv('SonarQubeCursoCI') {
                     sh "/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=AngularApp -Dsonar.sources=src"
+                }
+            }
+        }
+
+        stage('SonarQube Quality Gate') {
+            steps {
+                sleep 5
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }

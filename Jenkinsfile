@@ -14,9 +14,17 @@ pipeline {
             }
         }
 
+        stage('Run SonarQube'){
+            steps{
+                with
+            }
+        }
+
         stage('Run build'){
             steps{
-                sh 'npm run build'
+                withSonarQubeEnv('SonarQubeCursoCI') {
+                    sh "/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=AngularApp -Dsonar.sources=src"
+                }
             }
         }
     }

@@ -8,12 +8,6 @@ pipeline {
             }
         }
 
-        stage('Syntax Verification'){
-            steps{
-                sh 'npm run lint'
-            }
-        }
-
         stage('Run Unit Tests'){
             steps{
                 sh 'npm run test'

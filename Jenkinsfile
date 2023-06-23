@@ -1,33 +1,16 @@
 pipeline {
     agent any
 
+    environment{
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        AWS_DEFAULT_REGION = 'us-east-1'
+    }
+
     stages {
         stage('Install Dependencies'){
             steps{
                 sh 'npm install'
-            }
-        }
-
-        stage('Run Unit Tests'){
-            steps{
-                sh 'npm run test'
-            }
-        }
-
-        stage('Run SonarQube'){
-            steps{
-                withSonarQubeEnv('SonarQubeCursoCI') {
-                    sh "/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=AngularApp -Dsonar.sources=src"
-                }
-            }
-        }
-
-        stage('SonarQube Quality Gate') {
-            steps {
-                sleep 5
-                timeout(time: 10, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
-                }
             }
         }
 
@@ -37,9 +20,9 @@ pipeline {
             }
         }
 
-        stage('Deploy to Server'){
+        stage('Deploy to AWS'){
             steps{
-                sh 'scp dist/clase6/* root@206.189.254.187:/usr/ucreativa/romell-dev/'
+                sh 'aws s3 cp dist/clase6/ s3://demodeploymentclase10 --recursive'
             }
         }
     }

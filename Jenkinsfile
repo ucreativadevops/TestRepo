@@ -39,7 +39,7 @@ pipeline {
 
         stage('Deploy to Server'){
             steps{
-                sh 'scp dist/AngularApp/* root@206.189.254.187:/usr/ucreativa/romell-dev/'
+                sh 'scp dist/clase6/* root@206.189.254.187:/usr/ucreativa/romell-dev/'
             }
         }
     }

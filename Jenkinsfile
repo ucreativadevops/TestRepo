@@ -36,5 +36,11 @@ pipeline {
                 sh 'npm run build'
             }
         }
+
+        stage('Deploy to Server'){
+            steps{
+                sh 'scp dist/AngularApp/* root@206.189.254.187:/usr/ucreativa/romell-dev/'
+            }
+        }
     }
 }
